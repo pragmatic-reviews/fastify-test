@@ -6,12 +6,6 @@
 npm i fastify
 ```
 
-## Install Fastify CLI
-
-```
-npm i -g fastify-cli
-```
-
 ## Install Nodemon
 
 ```
