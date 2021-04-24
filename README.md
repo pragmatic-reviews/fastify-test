@@ -17,3 +17,11 @@ npm i -g fastify-cli
 ```
 npm i -g nodemon
 ```
+
+## Install Plugins
+
+```
+npm i fastify-plugin
+npm i fastify-mongodb
+npm i --save fastify-env
+```

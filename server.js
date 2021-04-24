@@ -1,27 +1,34 @@
-const schemas = require('./schema');
+
 const fastify = require('fastify')({ logger: true });
+const fastifyEnv = require('fastify-env');
 
-fastify.get('/message', async (request, reply) => {
-  return { 
-        message: 'Hello world!'
-    }
-});
-
-fastify.get('/message/:id', { schema: schemas.getMessage }, async (request, reply) => {
-    return {
-          id: request.params.id, 
-          message: 'Hello world!'
+fastify.register(fastifyEnv, {
+  dotenv: true,
+  schema: {
+    type: 'object',
+    required: [ 'MONGODB' ],
+    properties: {
+      MONGODB: {
+        type: 'string',
+        default: ''
       }
+    }
+  }
 });
 
-fastify.post('/message', { schema: schemas.createMessage } , async (request, reply) => {
-    //if (request.validationError) {
-    //    reply.code(400).send(request.validationError)
-    //}
-    return {
-        message: request.body.message
-    }
+fastify.after(err => err?console.log(err):console.log('Env Plugin is ready.'))
+
+fastify.register(require('./plugins/mongo-db'));
+
+fastify.after(err => err?console.log(err):console.log('MongoDB Plugin is reqdy.'))
+
+fastify.register(require('./routes/messages'), {
+  prefix: "/api/v1"
 });
+
+fastify.after(err => err?console.log(err):console.log('Message API routes are ready.'))
+
+fastify.ready(err => err?console.log(err):console.log('All plugins are ready'))
 
 fastify.setErrorHandler(function (error, request, reply) {
     if (error.validation) {
