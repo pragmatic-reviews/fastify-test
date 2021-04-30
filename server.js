@@ -1,6 +1,8 @@
 
-const fastify = require('fastify')({ logger: true });
+const fastify = require('fastify')({ logger: false });
 const fastifyEnv = require('fastify-env');
+
+const cache = new Map();
 
 fastify.register(fastifyEnv, {
   dotenv: true,
@@ -28,13 +30,17 @@ fastify.register(require('./routes/messages'), {
 
 fastify.after(err => err?console.log(err):console.log('Message API routes are ready.'))
 
-fastify.ready(err => err?console.log(err):console.log('All plugins are ready'))
-
 fastify.setErrorHandler(function (error, request, reply) {
     if (error.validation) {
        reply.status(422).send(new Error('validation failed'))
     }
 });
+
+fastify.register(require('./hooks/cache'));
+
+fastify.after(err => err?console.log(err):console.log('Cache plugin is ready.'));
+
+fastify.ready(err => err?console.log(err):console.log('All plugins are ready'));
 
 const start = async () => {
   try {

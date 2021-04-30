@@ -10,14 +10,16 @@ async function routes (fastify, options) {
     if (result.length === 0) {
       throw new Error('No documents found')
     }
+    console.log('RETURNING FROM SERVICE', result);
     reply.code(200).send(result);
   });
   
   fastify.get('/messages/:id', { schema: schemas.getMessage }, async (request, reply) => {
     const id = request.params.id;
+    console.log('RETURNING FROM SERVICE - ID = ', id);
     reply.code(200).send({
       id: id,
-      message: "Test"
+      message: `Message ${id}`
     });
   });
   
