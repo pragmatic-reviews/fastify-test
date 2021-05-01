@@ -2,8 +2,6 @@
 const fastify = require('fastify')({ logger: false });
 const fastifyEnv = require('fastify-env');
 
-const cache = new Map();
-
 fastify.register(fastifyEnv, {
   dotenv: true,
   schema: {
@@ -36,7 +34,7 @@ fastify.setErrorHandler(function (error, request, reply) {
     }
 });
 
-fastify.register(require('./hooks/cache'));
+fastify.register(require('./plugins/cache'));
 
 fastify.after(err => err?console.log(err):console.log('Cache plugin is ready.'));
 
