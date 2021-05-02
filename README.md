@@ -25,3 +25,10 @@ npm i fastify-plugin
 npm i fastify-mongodb
 npm i --save fastify-env
 ```
+
+## Install node-cache
+
+```
+npm i node-cache
+```
+
